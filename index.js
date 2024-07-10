@@ -20,7 +20,7 @@ bot.setMyCommands([
     console.log(`-------Telegram bot @${res.username} is running!--------`)
 )).catch(err => { throw err })
 
-let duration = 25* 60 * 1000;
+let duration = 25 * 60 * 1000;
 let breakDuration = 5 * 60 * 1000;
 // Handle /start command
 bot.onText(/\/start/, (msg) => {
@@ -64,7 +64,8 @@ bot.on("message", async (msg) => {
                     date: Date.now() + (duration),
                     chatId: chatId,
                     paused: false,
-                    remainTime: 0
+                    remainTime: 0,
+                    lastSeen: Date.now()
                 }
                 fs.writeFile("./db.json", JSON.stringify(dbb, null, 4), err => {
                     if (err) throw err;
@@ -81,7 +82,8 @@ bot.on("message", async (msg) => {
                     date: Date.now() + (duration),
                     chatId: chatId,
                     paused: false,
-                    remainTime: 0
+                    remainTime: 0,
+                    lastSeen: Date.now()
                 }
             } else {
                 bot.sendMessage(chatId, `<code>${dbb[msg.from.id].sessionName}</code> is still running!`, { reply_to_message_id: msg.message_id, parse_mode: 'HTML' });
@@ -124,11 +126,7 @@ bot.on("message", async (msg) => {
                 bot.sendMessage(chatId, `No Current Session!`, { reply_to_message_id: msg.message_id })
                 return;
             }
-            bot.sendMessage(chatId, `<code>${dbb[msg.from.id].sessionName}</code> got terminated!`, { parse_mode: 'HTML' })
-            dbb[msg.from.id].hasSession = false;
-            fs.writeFile("./db.json", JSON.stringify(dbb, null, 4), err => {
-                if (err) throw err;
-            });
+            terminate(msg.from.id);
         }
     }
 })
@@ -179,7 +177,7 @@ bot.on("message", async (msg) => {
             }
             let time = current(msg.from.id);
             if (dbb[msg.from.id].paused) {
-                time = current(msg.from.id,dbb[msg.from.id].remainTime)
+                time = current(msg.from.id, dbb[msg.from.id].remainTime)
                 bot.sendMessage(chatId, `<code>${dbb[msg.from.id].sessionName}</code> is paused!`, {
                     reply_to_message_id: msg.message_id,
                     parse_mode: 'HTML'
@@ -191,7 +189,7 @@ bot.on("message", async (msg) => {
                 }
                 return;
             }
-            
+
             if (dbb[msg.from.id].isBreak) {
                 bot.sendMessage(chatId, `Break time!\nSession: <code>${dbb[msg.from.id].sessionName}</code>\nTime remaining: ${time}`, { reply_to_message_id: msg.message_id, parse_mode: 'HTML' })
             } else {
@@ -370,11 +368,12 @@ bot.on('message', async (msg) => {
     }
 })
 
-function current(y,t) {
-    if(!t)t=(dbb[y].date - Date.now())+1000
+function current(y, t) {
+    if (!t) t = (dbb[y].date - Date.now()) + 1000
     let m = parseInt(t / (60 * 1000));
-    let s = (parseInt(t / (1000)) % 60) ;
+    let s = (parseInt(t / (1000)) % 60);
     s = Math.abs(s)
+    dbb[y].lastSeen = Date.now();
     return (m >= 10 ? m : ('0' + m)) + ":" + (s >= 10 ? s : '0' + s);
 }
 function checker(y) {
@@ -401,13 +400,29 @@ function checker(y) {
             }
 }
 
+function terminate(i){
+
+    bot.sendMessage(dbb[i].chatId, `<code>${dbb[i].sessionName}</code> got terminated!`, { parse_mode: 'HTML' })
+
+    dbb[i].hasSession = false;
+    fs.writeFile("./db.json", JSON.stringify(dbb, null, 4), err => {
+        if (err) throw err;
+    });
+}
 setInterval(() => {
     for (let i in dbb) {
-        console.log(dbb[i].date)
         if (dbb[i].date <= Date.now() && !dbb[i].paused && dbb[i].hasSession) {
             checker(i);
         }
     }
 }, 10 * 1000);
+
+setInterval(() => {
+    for (let i in dbb) {
+        if (((Date.now() - dbb[i].lastSeen) >= (60 * 60 * 1000)) && dbb[i].hasSession) {
+            terminate(i);
+        }
+    }
+}, 30 * 60 * 1000);
 
 console.log('Bot is running...');
