@@ -1,32 +1,35 @@
 {
     "533826009": {
-        "hasSession": true,
-        "sessionName": "deploy",
-        "cycleNumber": 2,
+        "hasSession": false,
+        "sessionName": "werwer",
+        "cycleNumber": 1,
         "isBreak": false,
-        "date": 1720611762201,
+        "date": 1720625272421,
         "chatId": -1002202998394,
         "paused": false,
-        "remainTime": 0
+        "remainTime": 0,
+        "lastSeen": 1720523772421
     },
     "913202320": {
         "hasSession": false,
-        "sessionName": "hatem",
-        "cycleNumber": 9,
+        "sessionName": "zby",
+        "cycleNumber": 1,
         "isBreak": false,
-        "date": 1720600406180,
+        "date": 1720624534188,
         "chatId": -1002202998394,
         "paused": false,
-        "remainTime": 0
+        "remainTime": 0,
+        "lastSeen": 1720624650400
     },
     "5760947287": {
         "hasSession": false,
-        "sessionName": "rinkg",
+        "sessionName": "teezblabn",
         "cycleNumber": 1,
         "isBreak": false,
-        "date": 1720608009399,
+        "date": 1720624795936,
         "chatId": -1002202998394,
         "paused": false,
-        "remainTime": 1493737
+        "remainTime": 0,
+        "lastSeen": 1720624650400
     }
 }
