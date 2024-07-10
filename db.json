@@ -1,0 +1,32 @@
+{
+    "533826009": {
+        "hasSession": true,
+        "sessionName": "deploy",
+        "cycleNumber": 2,
+        "isBreak": false,
+        "date": 1720611762201,
+        "chatId": -1002202998394,
+        "paused": false,
+        "remainTime": 0
+    },
+    "913202320": {
+        "hasSession": false,
+        "sessionName": "hatem",
+        "cycleNumber": 9,
+        "isBreak": false,
+        "date": 1720600406180,
+        "chatId": -1002202998394,
+        "paused": false,
+        "remainTime": 0
+    },
+    "5760947287": {
+        "hasSession": false,
+        "sessionName": "rinkg",
+        "cycleNumber": 1,
+        "isBreak": false,
+        "date": 1720608009399,
+        "chatId": -1002202998394,
+        "paused": false,
+        "remainTime": 1493737
+    }
+}
